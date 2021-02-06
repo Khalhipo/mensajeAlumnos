@@ -44,26 +44,6 @@ public class ServletAlumnos extends HttpServlet {
         rutaFicheros = config.getServletContext().getRealPath("").concat(File.separator).concat("ficheros");
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServletAlumnos</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServletAlumnos at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
-        }
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -99,7 +79,24 @@ public class ServletAlumnos extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String grupo = (String) request.getParameter("grupoSeleccionado");
+        String[] checkboxes = request.getParameterValues("checkbox");
+        ArrayList<Alumno> alumnosSeleccionados = new ArrayList<Alumno>();
+        alumnos = Utilidades.getAlumnos(rutaFicheros.concat(File.separator).concat(grupo).concat(".txt"));
+                
+        
+        for(Alumno alumno: alumnos) {
+            for(String checkbox: checkboxes){
+                if(alumno.getId() == Integer.parseInt(checkbox)){
+                    alumnosSeleccionados.add(alumno);
+                }
+            }
+        }
+        
+        request.setAttribute("grupoSel", grupo);
+        request.setAttribute("alumnosSel", alumnosSeleccionados);
+        request.getRequestDispatcher("alumnos2.jsp").forward(request, response);
     }
 
     /**

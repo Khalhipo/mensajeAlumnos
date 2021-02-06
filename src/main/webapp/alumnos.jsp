@@ -43,17 +43,18 @@
         </form>
             <br>
             <form action="ServletAlumnos" method="post">
-                <label for="grupoSel">Grupo seleccionado: </label><input id="grupoSel" type="text" value="<%= grupoSel %>"><br>
+                <label for="grupoSel">Grupo seleccionado: </label><input name="grupoSeleccionado" id="grupoSel" type="text" value="<%= grupoSel %>"><br>
                 <table>
                     <% for(Alumno al: alumnos) { %>
                     <tr>
                         <td><%= al.getNombre()%></td>
                         <td><%= al.getApellidos()%></td>
                         <td><%= al.getEmail() %></td>
-                        <td><input type="checkbox" value="<%= al.getId() %>"></td>
+                        <td><input name="checkbox" type="checkbox" value="<%= al.getId() %>"></td>
                     </tr>
                     <% } %>
                 </table>
+                <input type="submit" value="Enviar">
             </form>
     </body>
 </html>
