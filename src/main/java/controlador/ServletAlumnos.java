@@ -34,14 +34,11 @@ public class ServletAlumnos extends HttpServlet {
      */
     private ArrayList<Alumno> alumnos;
     private ArrayList<String> grupos;
-    private String rutaFicheros;
 
     public void init(ServletConfig config) throws ServletException {
         grupos = new ArrayList<String>();
         grupos.add("2daw_a");
         grupos.add("2daw_b");
-
-        rutaFicheros = config.getServletContext().getRealPath("").concat(File.separator).concat("ficheros");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,7 +57,7 @@ public class ServletAlumnos extends HttpServlet {
         String grupoSel = (String) request.getParameter("grupo")!=null?
                 (String) request.getParameter("grupo")
                 :"2daw_a";
-        alumnos = Utilidades.getAlumnos(rutaFicheros.concat(File.separator).concat(grupoSel).concat(".txt"));
+        alumnos = Utilidades.getAlumnos(grupoSel);
         
         request.setAttribute("alumnos", alumnos);
         request.setAttribute("grupos", grupos);
@@ -83,7 +80,7 @@ public class ServletAlumnos extends HttpServlet {
         String grupo = (String) request.getParameter("grupoSeleccionado");
         String[] checkboxes = request.getParameterValues("checkbox");
         ArrayList<Alumno> alumnosSeleccionados = new ArrayList<Alumno>();
-        alumnos = Utilidades.getAlumnos(rutaFicheros.concat(File.separator).concat(grupo).concat(".txt"));
+        alumnos = Utilidades.getAlumnos(grupo);
                 
         
         for(Alumno alumno: alumnos) {

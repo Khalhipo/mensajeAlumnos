@@ -5,13 +5,9 @@
  */
 package modelo;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
 
 /**
  *
@@ -19,29 +15,19 @@ import java.util.ArrayList;
  */
 public class Utilidades {
 
-    public static ArrayList<Alumno> getAlumnos(String fichero) {
+    public static ArrayList<Alumno> getAlumnos(String grupo) {
         ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
 
-        try {
-
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(fichero), "utf-8"));
-            String linea;
-            try {
-
-                while ((linea = buffer.readLine()) != null) {
-                    String[] arrayDatos = linea.split(";");
-                    Alumno nuevoAlumno = new Alumno(Integer.parseInt(arrayDatos[0]),arrayDatos[1],arrayDatos[2],arrayDatos[3]);
-                    alumnos.add(nuevoAlumno);
-                }
-
-                buffer.close();
-            } catch (IOException e) {
-
-            }
-
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_mensajesAlumnos_war_1.0-SNAPSHOTPU");
+        EntityManager manager = factory.createEntityManager();
+        String sql = "SELECT * FROM alumnos WHERE grupo='" + grupo + "'";
+        Query q = manager.createNativeQuery(sql,Alumnos.class);
+        List<Alumnos> alumnosBD =  q.getResultList();
+        for ( Alumnos a: alumnosBD ){
+            Alumno miAlumno = new Alumno(a.getId(),a.getNombre(),a.getApellidos(),a.getCorreo());
+            alumnos.add(miAlumno);         
         }
         return alumnos;
+        
     }
 }
